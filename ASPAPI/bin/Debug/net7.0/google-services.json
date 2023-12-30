@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "562505344216",
+    "firebase_url": "https://solar-smart-project-default-rtdb.firebaseio.com",
+    "project_id": "solar-smart-project",
+    "storage_bucket": "solar-smart-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562505344216:android:01d35ebd3214f80bb0e3ad",
+        "android_client_info": {
+          "package_name": "com.solarapplication.service"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7L2Fssk_2A0iLdvpZQk3SybS1vn31M2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
