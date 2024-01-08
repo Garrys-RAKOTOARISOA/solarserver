@@ -22,5 +22,5 @@ public class TotalConsommationPrise
     public DateOnly Date { get; set; }
     
     [ForeignKey("IdModule")]
-    public Module? Module { get; set; }
+    public ModuleSolar? Module { get; set; }
 }

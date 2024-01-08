@@ -14,7 +14,7 @@ public class ApplicationDbContext : IdentityDbContext
     
     public DbSet<ASPAPI.Models.Batterie> Batterie { get; set; } = default!;
     
-    public DbSet<ASPAPI.Models.Module> Module { get; set; } = default!;
+    public DbSet<ASPAPI.Models.ModuleSolar> Module { get; set; } = default!;
     
     public DbSet<ASPAPI.Models.BatterieData> BatterieData { get; set; } = default!;
     

@@ -31,5 +31,5 @@ public class PanneauData
     public DateTime Temps { get; set; }
     
     [ForeignKey("IdModule")]
-    public virtual Module? Module { get; set; }
+    public virtual ModuleSolar? Module { get; set; }
 }

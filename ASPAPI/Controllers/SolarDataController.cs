@@ -44,8 +44,8 @@ public class SolarDataController : Controller
             _context.SaveChanges();
         }
         
-        Module module = _context.Module.First(a => a.Id == idmodule);
-        Batterie batterie = _context.Batterie.First(a => a.Id == module.IdBatterie);
+        ModuleSolar moduleSolar = _context.Module.First(a => a.Id == idmodule);
+        Batterie batterie = _context.Batterie.First(a => a.Id == moduleSolar.IdBatterie);
         BatterieData b = new BatterieData()
         {
             IdModule = idmodule,
@@ -282,13 +282,13 @@ public class SolarDataController : Controller
     }
 
     [HttpGet("ModuleById/{id}", Name = "ModuleById")]
-    public Module GetModule(int id)
+    public ModuleSolar GetModule(int id)
     {
         return _context.Module.First(a => a.Id == id);
     }
 
     [HttpGet("ModuleByIdClient/{idclient}", Name = "ModuleByIdClient")]
-    public Module GetModuleByIdClient(int idclient)
+    public ModuleSolar GetModuleByIdClient(int idclient)
     {
         Client client = _context.Client.First(a => a.Id == idclient);
         return _context.Module.First(a => a.Id == client.IdModule);
