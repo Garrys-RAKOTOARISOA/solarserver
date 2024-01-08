@@ -27,6 +27,9 @@ public class PlanningBatterie
     [Column("valeurenergie")]
     public double ValeurEnergie { get; set; }
     
+    [Column("done")]
+    public bool Done { get; set; }
+    
     [ForeignKey("IdModule")]
     public virtual Module? Module { get; set; }
 }

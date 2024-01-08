@@ -19,10 +19,7 @@ public class Module
     
     [Column("idbatterie")]
     [DisplayName("typebatterie")]
-    public int IdBatterie { get; set; }
-
-    [Column("state")]
-    public bool State { get; set; }
+    public int IdBatterie { get; set; } 
     
     [ForeignKey("IdBatterie")]
     public virtual Batterie? Batterie { get; set; }

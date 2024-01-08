@@ -30,6 +30,9 @@ public class BatterieData
     [Column("temps")]
     public DateTime Temps { get; set; }
     
+    [Column("puissance")]
+    public double Puissance { get; set; }
+    
     [ForeignKey("IdModule")]
     public virtual Module? Module { get; set; }
 }

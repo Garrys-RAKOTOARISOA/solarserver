@@ -85,19 +85,25 @@ public class SolarDataController : Controller
             .Where(a => a.IdModule == idmodule && 
                         today.CompareTo(a.DateDebut.Date) >= 0 &&
                         today.CompareTo(a.DateFin.Date) <= 0)
-            .OrderBy(a => a.DateFin)
+            .OrderBy(a => a.Id)
             .ToList();
 
         foreach (var v in listeplanning)
         {
-            if (v.DateFin <= DateTime.Now.ToUniversalTime())
+            if (!v.Done)
             {
-                SwitchRelaisBatterie(idmodule);
-            }
+                if (v.DateFin <= DateTime.Now.ToUniversalTime())
+                {
+                    SwitchRelaisBatterie(idmodule);
+                    v.Done = true;
+                }
 
-            if (energie >= v.ValeurEnergie)
-            {
-                SwitchRelaisBatterie(idmodule);
+                if (energie >= v.ValeurEnergie)
+                {
+                    SwitchRelaisBatterie(idmodule);
+                }
+                v.Done = true;
+                _context.SaveChanges();
             }
         }
 
@@ -174,19 +180,26 @@ public class SolarDataController : Controller
             .Where(a => a.IdModule == idmodule && 
                         today.CompareTo(a.DateDebut.Date) >= 0 &&
                         today.CompareTo(a.DateFin.Date) <= 0)
-            .OrderBy(a => a.DateFin)
+            .OrderBy(a => a.Id)
             .ToList();
 
         foreach (var v in listeplanning)
         {
-            if (v.DateFin <= DateTime.Now.ToUniversalTime())
+            if (!v.Done)
             {
-                SwitchRelaisPrise(idmodule);
-            }
+                if (v.DateFin <= DateTime.Now.ToUniversalTime())
+                {
+                    SwitchRelaisPrise(idmodule);
+                    v.Done = true;
+                }
 
-            if (consommation >= v.ValeurConsommation)
-            {
-                SwitchRelaisPrise(idmodule);
+                if (consommation >= v.ValeurConsommation)
+                {
+                    SwitchRelaisPrise(idmodule);
+                    v.Done = true;
+                }
+
+                _context.SaveChanges();
             }
         }
 
@@ -389,23 +402,35 @@ public class SolarDataController : Controller
     }
 
     [HttpGet("InsertPlanningPrise/{idmodule}/{datedebut}/{datefin}/{valeurconsommation}", Name = "InsertPlanningPrise")]
-    public IActionResult InsertPlanningPrise(int idmodule, DateTime datedebut, DateTime datefin,
-        double valeurconsommation)
+    public IActionResult InsertPlanningPrise(int idmodule, DateTime datedebut, DateTime datefin, double valeurconsommation)
     {
-        Console.WriteLine(datedebut);
-        Console.WriteLine(datefin);
+        datedebut = datedebut.ToUniversalTime();
+        datefin = datefin.ToUniversalTime();
+
         PlanningPrise planning = new PlanningPrise()
         {
             IdModule = idmodule,
-            DateDebut = datedebut.ToUniversalTime(),
-            DateFin = datefin.ToUniversalTime(),
-            DateAction = (DateTime.Now).ToUniversalTime(),
+            DateDebut = datedebut,
+            DateFin = datefin,
+            DateAction = DateTime.UtcNow, 
             ValeurConsommation = valeurconsommation
         };
-        _context.Add(planning);
-        _context.SaveChanges();
-        return Ok($"Planning Prise has been inserted at, time = "+DateTime.Now);
+
+        bool exists = _context.PlanningPrise
+            .Any(p => p.IdModule == idmodule && p.DateDebut <= datefin && p.DateFin >= datedebut);
+
+        if (!exists)
+        {
+            _context.Add(planning);
+            _context.SaveChanges();
+            return Ok($"Le planning de prise a été inséré à l'heure : {DateTime.UtcNow}");
+        }
+        else
+        {
+            return Ok("Il existe déjà un planning pour cette période.");
+        }
     }
+
     
     [HttpGet("InsertPlanningBatterie/{idmodule}/{datedebut}/{datefin}/{valeurenergie}", Name = "InsertPlanningBatterie")]
     public IActionResult InsertPlanningBatterie(int idmodule, DateTime datedebut, DateTime datefin,
@@ -419,9 +444,19 @@ public class SolarDataController : Controller
             DateAction = (DateTime.Now).ToUniversalTime(),
             ValeurEnergie = valeurenergie
         };
-        _context.Add(planning);
-        _context.SaveChanges();
-        return Ok($"Planning Battery has been inserted at, time = "+DateTime.Now);
+        bool exists = _context.PlanningBatterie
+            .Any(p => p.IdModule == idmodule && p.DateDebut <= datefin && p.DateFin >= datedebut);
+
+        if (!exists)
+        {
+            _context.Add(planning);
+            _context.SaveChanges();
+            return Ok($"Le planning de prise a été inséré à l'heure : {DateTime.UtcNow}");
+        }
+        else
+        {
+            return Ok("Il existe déjà un planning pour cette période.");
+        }
     }
 
     [HttpGet("ListePlanningPrise/{idmodule}", Name = "ListePlanningPrise")]

@@ -7,6 +7,17 @@ drop table client cascade;
 drop table batteriedata cascade;
 drop table prisedata cascade;
 drop table panneaudata cascade; 
+drop table couleuboutonbatterie cascade;
+drop table couleurboutonprise cascade;
+drop table planningbatterie cascade;
+drop table planningprise cascade;
+drop table totalconsommationprise cascade;
+drop table totalproductionpanneau cascade;
+drop table relaisbatterie cascade;
+drop table relaisprise cascade; 
+drop table dureeutilisationbatterie cascade;
+drop table notificationmodule cascade;
+drop table typebatterie cascade; 
    
 create table typebatterie(
     id serial not null,
@@ -19,7 +30,8 @@ create table module(
     qrcode varchar(100) not null,
     nommodule varchar(100) not null,
     idbatterie int not null,
-    state bool default false,
+    ssid varchar(1500) not null,
+    pass varchar(1500) not null,
     primary key(id),
     foreign key(idbatterie) references typebatterie(id)
 );
@@ -32,6 +44,7 @@ create table batteriedata(
     courant real not null,
     pourcentage real not null,
     temps timestamp not null,
+    puissance real not null,
     primary key(id),
     foreign key(idmodule) references module(id)
 );
@@ -133,6 +146,7 @@ create table planningprise(
     datefin timestamp not null,
     dateaction timestamp not null,
     valeurconsommation real not null,
+    done boolean not null default false,
     primary key(id),
     foreign key(idmodule) references module(id)
 );
@@ -144,6 +158,7 @@ create table planningbatterie(
     datefin timestamp not null,
     dateaction timestamp not null,
     valeurenergie real not null,
+    done boolean not null default false,
     primary key(id),
     foreign key(idmodule) references module(id)
 );
@@ -167,4 +182,4 @@ create table relaisprise(
 insert into typebatterie(valeur) values (12);
 insert into typebatterie(valeur) values (24);
 
-insert into module(qrcode,nommodule,idbatterie) values ('qrcode','module1',1);
+insert into module(qrcode,nommodule,idbatterie,ssid,pass) values ('qrcode','module1',1,'wifi','wifipass');
